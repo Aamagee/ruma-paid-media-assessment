@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>RUMA Paid Media Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F4F6F5; --surface:#FFFFFF; --ink:#18201E; --muted:#5B6663; --line:#DCE2DF;
+  --accent:#2E5E56; --accent-soft:#E3EEEB; --blush:#F4E7E2; --blush-ink:#8A4B3C;
+  --good:#2F7A4F; --good-soft:#E2F1E7; --warn:#9A5F0C; --warn-soft:#FBEFD9; --bad:#B23A3A; --bad-soft:#F8E1E1;
+  --todo:#7A5A12; --todo-soft:#FFF7E0;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#101413; --surface:#171D1C; --ink:#E5ECEA; --muted:#9AA6A2; --line:#2A3331;
+    --accent:#86C2B5; --accent-soft:#1C2D2A; --blush:#2C2220; --blush-ink:#E3A898;
+    --good:#6BC08E; --good-soft:#18291F; --warn:#E0A850; --warn-soft:#2E2412; --bad:#EE8A8A; --bad-soft:#321A1A;
+    --todo:#E8C66A; --todo-soft:#2A2412;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#101413; --surface:#171D1C; --ink:#E5ECEA; --muted:#9AA6A2; --line:#2A3331;
+  --accent:#86C2B5; --accent-soft:#1C2D2A; --blush:#2C2220; --blush-ink:#E3A898;
+  --good:#6BC08E; --good-soft:#18291F; --warn:#E0A850; --warn-soft:#2E2412; --bad:#EE8A8A; --bad-soft:#321A1A;
+  --todo:#E8C66A; --todo-soft:#2A2412;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0 64px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;text-wrap:balance;line-height:1.2;margin:0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.2em}
+li+li{margin-top:.35em}
+strong{font-weight:600}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* Hero */
+.hero{max-width:1120px;margin:0 auto;padding-block:56px 40px;display:grid;gap:28px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(34px,5vw,54px);letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{font-size:18px;max-width:62ch;color:var(--ink)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:14px;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:600}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:8px}
+.principle{border-top:2px solid var(--accent);padding-top:12px}
+.principle h3{font-family:var(--sans);font-size:15px;font-weight:600;margin-bottom:4px}
+.principle p{font-size:14.5px;color:var(--muted)}
+
+/* Layout */
+.layout{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:210px minmax(0,1fr);gap:56px;padding-top:40px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start;font-size:14px}
+nav.toc ol{list-style:none;padding:0;display:grid;gap:2px}
+nav.toc li+li{margin-top:0}
+nav.toc a{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:6px;color:var(--muted);text-decoration:none}
+nav.toc a span{font-family:var(--mono);font-size:12px;opacity:.8}
+nav.toc a:hover{color:var(--ink);background:var(--accent-soft)}
+nav.toc a.active{color:var(--accent);background:var(--accent-soft);font-weight:600}
+main{min-width:0;display:grid;gap:72px}
+
+/* Sections */
+.section-head{display:grid;gap:6px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.section-head h2{font-size:clamp(28px,3.4vw,36px)}
+.section-head p{color:var(--muted);max-width:62ch}
+.qs{display:grid;gap:20px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:28px;display:grid;gap:16px;scroll-margin-top:24px}
+.q-head{display:grid;gap:6px}
+.q-num{font-family:var(--mono);font-size:12.5px;color:var(--accent);letter-spacing:.04em}
+.q h3{font-size:24px}
+.q-ask{font-size:14px;color:var(--muted);max-width:68ch}
+.takeaway{font-size:17px;font-weight:500;max-width:68ch;padding:12px 16px;background:var(--accent-soft);border-radius:6px}
+.body{display:grid;gap:14px;max-width:70ch}
+.body h4{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:6px 0 -4px}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+td.r,th.r{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.label{font-weight:600;white-space:nowrap}
+tr.group td{background:var(--bg);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding-block:8px}
+tr.hl td{background:var(--accent-soft)}
+.calc{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+
+/* Budget bar */
+.budget{display:grid;gap:10px}
+.bar{display:flex;height:44px;border-radius:6px;overflow:hidden;font-size:13px;font-weight:600}
+.bar div{display:flex;align-items:center;padding:0 12px;white-space:nowrap;overflow:hidden}
+.bar .g{background:var(--accent);color:var(--surface)}
+.bar .m{background:var(--blush-ink);color:var(--surface)}
+.bar .r{background:repeating-linear-gradient(45deg,var(--line) 0 6px,var(--bg) 6px 12px);color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px;color:var(--muted)}
+.legend b{color:var(--ink)}
+
+/* Journey */
+.journey{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;overflow-x:auto}
+.stage{border:1px solid var(--line);border-radius:8px;padding:12px;display:grid;gap:6px;align-content:start;position:relative;background:var(--bg)}
+.stage .s-name{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.stage .s-what{font-size:13.5px}
+.stage .s-kpi{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
+.stage .s-kpi b{display:block;color:var(--ink);font-weight:600}
+.stage.key{border-color:var(--accent);background:var(--accent-soft)}
+
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:2px}
+.kpi .k-l{font-size:12.5px;color:var(--muted)}
+.kpi .k-v{font-family:var(--mono);font-size:21px;font-weight:500;font-variant-numeric:tabular-nums}
+.kpi.star{border-color:var(--accent);background:var(--accent-soft)}
+
+/* Ad mockups */
+.ads{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.ad{border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;grid-template-rows:auto auto 1fr auto;background:var(--bg)}
+.ad-top{display:flex;align-items:center;gap:8px;padding:10px 12px;font-size:13px;font-weight:600}
+.ad-top i{width:26px;height:26px;border-radius:50%;background:var(--accent);display:inline-block}
+.ad-top small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.ad-visual{aspect-ratio:4/5;max-width:100%;display:grid;align-content:end;padding:16px;gap:6px;color:#fff}
+.ad-visual .fmt{justify-self:start;font-family:var(--mono);font-size:11px;background:rgba(0,0,0,.35);padding:3px 8px;border-radius:99px}
+.ad-visual .hook{font-family:var(--serif);font-size:22px;line-height:1.2;text-shadow:0 1px 8px rgba(0,0,0,.25)}
+.v1{background:linear-gradient(160deg,#6E8F87,#2E5E56)}
+.v2{background:linear-gradient(160deg,#C7A193,#8A4B3C)}
+.v3{background:linear-gradient(160deg,#8C9A7A,#4A5A3E)}
+.ad-body{padding:12px 14px;display:grid;gap:8px;font-size:13.5px}
+.ad-body dt{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ad-body dd{margin:0 0 4px}
+.ad-cta{margin:0 12px 12px;padding:9px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line);display:flex;justify-content:space-between;font-size:13px;font-weight:600}
+
+/* Status pills */
+.pill{display:inline-block;font-family:var(--sans);font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.ok{background:var(--good-soft);color:var(--good)}
+.watch{background:var(--warn-soft);color:var(--warn)}
+.off{background:var(--bad-soft);color:var(--bad)}
+
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.summary div{border-left:2px solid var(--accent);padding-left:14px}
+.summary h4{margin:0 0 4px !important}
+
+.note{font-size:13.5px;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.box{border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:grid;gap:8px;align-content:start}
+.box h5{margin:0;font-size:14px;font-weight:600}
+.box ul{font-size:14.5px}
+
+/* Portfolio placeholders */
+.todo{border:1.5px dashed var(--todo);background:var(--todo-soft);border-radius:10px;padding:22px;display:grid;gap:12px}
+.todo .tag{justify-self:start;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--todo)}
+.todo h3{font-size:22px}
+.todo dl{display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:8px 16px;margin:0;font-size:14.5px}
+.todo dt{font-weight:600}
+.todo dd{margin:0;color:var(--muted);font-style:italic}
+
+footer{max-width:1120px;margin:72px auto 0;padding-top:20px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+
+@media (max-width:960px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:28px;padding-top:0}
+  nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:-16px;padding:10px 16px;border-bottom:1px solid var(--line);overflow-x:auto}
+  nav.toc ol{display:flex;gap:4px;width:max-content}
+  nav.toc a{padding:6px 10px;white-space:nowrap}
+  nav.toc a span{display:none}
+  .q{scroll-margin-top:72px}
+  section{scroll-margin-top:64px}
+  .journey{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  .q{padding:20px 18px}
+  .hero{padding-block:36px 28px}
+  .todo dl{grid-template-columns:minmax(0,1fr)}
+  .todo dd{margin-bottom:6px}
+}
+</style>
+
+</head>
+<body>
+<header class="hero">
+  <div class="eyebrow">Skills assessment · Prepared for RUMA · September 2026</div>
+  <h1>Paid media that's measured in <em>patients</em>, not leads.</h1>
+  <p class="lede">My answers to RUMA's 20-question assessment on Meta Ads, Google Ads, tracking, conversion optimization, and reporting. Each answer opens with a one-line summary, and the detail follows below it.</p>
+  <div class="meta"><span>Candidate <b>Ava</b></span><span>Role <b>Paid Media / Performance Marketing</b></span><span>Monthly budget in scenario <b>$10,000</b></span></div>
+  <div class="principles">
+    <div class="principle"><h3>Optimize for the patient</h3><p>A $35 lead that never books costs more than a $90 lead that becomes a treated patient. I judge every channel on cost per treated patient and collected revenue.</p></div>
+    <div class="principle"><h3>Tracking comes first</h3><p>If the CRM, scheduler, and ad platforms don't agree, every decision after that is a guess. I fix measurement before I scale spend.</p></div>
+    <div class="principle"><h3>Protect the accounts</h3><p>Medical aesthetics is a heavily policed category. Compliant creative that keeps accounts healthy beats a hook that gets the account restricted.</p></div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="Sections">
+    <ol>
+      <li><a href="#strategy">Strategy <span>1–4</span></a></li>
+      <li><a href="#metrics">Metrics <span>5–8</span></a></li>
+      <li><a href="#tracking">Tracking <span>9–12</span></a></li>
+      <li><a href="#conversion">Conversion <span>13–16</span></a></li>
+      <li><a href="#creative">Creative <span>17–19</span></a></li>
+      <li><a href="#reporting">Reporting <span>20</span></a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+<!-- ============ STRATEGY ============ -->
+<section id="strategy">
+  <div class="section-head">
+    <div class="eyebrow">Section 1</div>
+    <h2>Strategy and campaign architecture</h2>
+    <p>How I'd launch a new aesthetic treatment on a $10,000 monthly budget.</p>
+  </div>
+  <div class="qs">
+
+  <article class="q" id="q1">
+    <div class="q-head"><div class="q-num">Q01</div><h3>Campaign launch strategy</h3><p class="q-ask">How would you divide a $10,000 monthly budget between Google and Meta during the first 30 days?</p></div>
+    <p class="takeaway">$5,000 Google, $4,000 Meta, and $1,000 held in reserve, then reallocated on day 14 based on cost per booked consultation.</p>
+    <div class="budget">
+      <div class="bar" role="img" aria-label="Budget split: Google 50 percent, Meta 40 percent, reserve 10 percent">
+        <div class="g" style="width:50%">Google $5,000</div>
+        <div class="m" style="width:40%">Meta $4,000</div>
+        <div class="r" style="width:10%">$1k</div>
+      </div>
+      <div class="legend"><span><b>Google 50%</b> captures existing demand</span><span><b>Meta 40%</b> creates demand</span><span><b>Reserve 10%</b> goes to the winner on day 14</span></div>
+    </div>
+    <div class="body">
+      <h4>Reasoning</h4>
+      <ul>
+        <li><strong>Google gets the larger share at launch</strong> because search captures people already looking for a treatment. It produces booked consultations fastest and gives us clean data in the first two weeks.</li>
+        <li><strong>Meta gets a meaningful share</strong> because a new treatment has little search demand yet. Meta is where we introduce it to people who don't know it exists. Much of Meta's impact will show up later as branded Google searches.</li>
+        <li><strong>The split depends on search volume.</strong> Before launch I'd check Google Keyword Planner for the treatment name and related concerns in RUMA's area. If monthly searches are low (a brand-new device or treatment name), I'd flip the split toward Meta, since Google can't spend money on searches that don't happen.</li>
+        <li><strong>$4,000 on Meta is about $133 a day.</strong> That's enough for one consolidated campaign, not many small ones. Meta's algorithm needs roughly 50 conversions per ad set per week to exit learning, so splitting the budget thin would starve it.</li>
+        <li><strong>The reserve keeps us from committing too early.</strong> On day 14 I compare cost per <em>booked consultation</em> (not cost per lead) by channel and move the $1,000 to whichever channel is winning.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="q" id="q2">
+    <div class="q-head"><div class="q-num">Q02</div><h3>Meta campaign structure</h3><p class="q-ask">Objective, prospecting and retargeting audiences, number of ad sets, creative formats, budget allocation, and optimization event.</p></div>
+    <p class="takeaway">Two campaigns and three ad sets in total, sending traffic to a landing page with booking, and optimizing for booking requests while CRM data feeds back through the Conversions API.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Element</th><th>Prospecting campaign</th><th>Retargeting campaign</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Objective</td><td>Leads, with a website conversion location (landing page with booking)</td><td>Leads, same conversion event</td></tr>
+        <tr><td class="label">Ad sets</td><td><strong>2:</strong> (A) Advantage+ audience, broad, 25-mile radius, age 25–60; (B) interest stack: skincare, med spa, cosmetic treatments, plus a lookalike of booked consultations</td><td><strong>1:</strong> website visitors (30 days), 50%+ video viewers, and IG/FB engagers (60 days), excluding anyone already booked</td></tr>
+        <tr><td class="label">Creative</td><td>9:16 Reels with the provider speaking to camera, UGC-style "my first appointment" video, and an explainer carousel. 4–6 ads per ad set.</td><td>Patient testimonial video (with written consent), static ad with the offer and "starting at" price, and an FAQ carousel on pain, downtime, and results</td></tr>
+        <tr><td class="label">Budget</td><td class="num">$108/day (about 80%), campaign budget shared across both ad sets</td><td class="num">$25/day (about 20%)</td></tr>
+        <tr><td class="label">Optimization</td><td colspan="2">Optimize for the <strong>Lead</strong> event (booking request or form submit), sent from both the pixel and the Conversions API and deduplicated. The CRM sends <strong>Booked</strong>, <strong>Attended</strong>, and <strong>Purchase + value</strong> back through the Conversions API from day one. Once deeper events reach about 50 a week, I move optimization down the funnel.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <ul>
+        <li><strong>Why a website instead of instant forms:</strong> instant forms produce cheap leads with low intent. If we test them, I'd use the "Higher intent" form type with a review screen and 1–2 qualifying questions (treatment interest, timeline).</li>
+        <li><strong>Why so few ad sets:</strong> at about $133/day, consolidating gives the algorithm enough data. I test new ideas through creative, not by adding more ad sets.</li>
+        <li><strong>Policy check:</strong> Meta limits some data use for health-related businesses, so I'd confirm that our events and custom audiences are allowed before relying on them.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="q" id="q3">
+    <div class="q-head"><div class="q-num">Q03</div><h3>Google campaign structure</h3><p class="q-ask">Campaign types, keywords, match types, negatives, geo targeting, bidding, and conversion actions.</p></div>
+    <p class="takeaway">Search-first, with tightly themed ad groups, phrase and exact match, and a tight radius. Bidding starts on Maximize Conversions and moves to Target CPA, and later to Target ROAS once offline revenue flows in.</p>
+    <div class="tbl-wrap"><table>
+      <tbody>
+        <tr><td class="label">Campaign types</td><td><strong>1. Search, non-brand treatment</strong> (about 75% of budget). <strong>2. Search, brand</strong> (about 10%, cheap protection against competitors bidding on our name). <strong>3. Search, concern/category</strong> (about 15%, e.g. "jawline contouring", "med spa near me"). No Performance Max in the first 30 days: without offline conversion data it tends to spend on brand terms and low-quality placements.</td></tr>
+        <tr><td class="label">Keywords</td><td>Ad groups by intent: <em>treatment + near me / city</em>, <em>treatment + cost / price</em>, <em>concern-based</em> ("fine lines treatment"), and <em>provider-type</em> ("med spa [city]"). Each ad group gets its own ad copy and matches its landing page section.</td></tr>
+        <tr><td class="label">Match types</td><td>Exact and phrase at launch. Broad match only after offline conversions are feeding Target CPA and we have 30+ conversions a month to guide it.</td></tr>
+        <tr><td class="label">Negatives</td><td>A shared list from day one: <em>free, cheap, DIY, at home, kit, cream, course, training, certification, school, jobs, salary, how to become, wholesale, supplies, groupon, reddit</em>. The non-brand campaign also blocks brand terms so the two don't overlap. I review search terms twice a week in the first month and weekly after.</td></tr>
+        <tr><td class="label">Geo</td><td>Radius around the clinic based on realistic drive time (start at about 20 miles, then adjust using location reports). Location option set to "Presence: people in or regularly in" your targeted locations, <strong>not</strong> "interest in". Bids adjusted by distance band once data comes in.</td></tr>
+        <tr><td class="label">Bidding</td><td>Weeks 1–2: Maximize Conversions, with a max CPC cap if CPCs spike. Once there are about 30 conversions in 30 days: Target CPA set at our cost-per-booked-consultation goal. Once offline revenue has been imported for 4–6 weeks: test Target ROAS.</td></tr>
+        <tr><td class="label">Conversion actions</td><td><strong>Primary (used for bidding):</strong> online consultation booked, qualified calls (60+ seconds, through call tracking), form submit. <strong>Secondary (observe only):</strong> click-to-call, booking page views. <strong>Imported offline:</strong> attended, treated with revenue value.</td></tr>
+        <tr><td class="label">Assets</td><td>Sitelinks (pricing, before &amp; after, meet the providers, FAQ), callouts, call asset, location asset, price asset, structured snippets.</td></tr>
+      </tbody>
+    </table></div>
+  </article>
+
+  <article class="q" id="q4">
+    <div class="q-head"><div class="q-num">Q04</div><h3>Patient journey</h3><p class="q-ask">Map the ideal journey from first impression to completed treatment. Identify the key conversion point at each stage.</p></div>
+    <p class="takeaway">Seven stages. The two that matter most are <strong>booked consultation</strong> (the first real commitment) and <strong>treated with revenue</strong> (the goal the platforms should learn from).</p>
+    <div class="journey">
+      <div class="stage"><div class="s-name">Discover</div><div class="s-what">Sees a Reel or runs a search</div><div class="s-kpi"><b>Hook rate</b>3-sec views ÷ impressions</div></div>
+      <div class="stage"><div class="s-name">Consider</div><div class="s-what">Clicks through to the landing page</div><div class="s-kpi"><b>Landing page view</b>Engaged sessions</div></div>
+      <div class="stage"><div class="s-name">Inquire</div><div class="s-what">Submits the form or calls</div><div class="s-kpi"><b>Lead / qualified call</b>Call over 60 seconds</div></div>
+      <div class="stage key"><div class="s-name">Book</div><div class="s-what">Schedules a consultation</div><div class="s-kpi"><b>Consultation booked</b>First real commitment</div></div>
+      <div class="stage"><div class="s-name">Attend</div><div class="s-what">Shows up to the consultation</div><div class="s-kpi"><b>Consultation attended</b>Show rate</div></div>
+      <div class="stage key"><div class="s-name">Treat</div><div class="s-what">Receives treatment and pays</div><div class="s-kpi"><b>Treated + revenue</b>What we optimize for</div></div>
+      <div class="stage"><div class="s-name">Return</div><div class="s-what">Rebooks, joins a membership, refers a friend</div><div class="s-kpi"><b>Second visit</b>Lifetime value</div></div>
+    </div>
+    <div class="body">
+      <p>Between stages, the things that move people forward are: <strong>speed to lead</strong> (contact within 5 minutes), <strong>automated reminders</strong> (text at 48 hours and 2 hours before the appointment to protect show rate), and a <strong>treatment plan</strong> presented at the consultation. After treatment, a review request and rebooking reminder timed to the treatment cycle (e.g. about 3–4 months for neuromodulators) turn one patient into recurring revenue.</p>
+    </div>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ METRICS ============ -->
+<section id="metrics">
+  <div class="section-head">
+    <div class="eyebrow">Section 2</div>
+    <h2>Metrics and financial performance</h2>
+    <p>Calculations shown in full. The goal is always profit per acquired patient, not the cheapest lead.</p>
+  </div>
+  <div class="qs">
+
+  <article class="q" id="q5">
+    <div class="q-head"><div class="q-num">Q05</div><h3>Performance calculation</h3><p class="q-ask">$6,000 spend · 240 leads · 60 booked · 45 attended · 27 treated · $40,500 collected.</p></div>
+    <p class="takeaway">A healthy campaign at $222 per acquired patient and 6.75× ROAS. The biggest leak is the 25% lead-to-booking rate.</p>
+    <div class="kpis">
+      <div class="kpi"><span class="k-l">Cost per lead</span><span class="k-v">$25.00</span></div>
+      <div class="kpi"><span class="k-l">Lead → booking</span><span class="k-v">25.0%</span></div>
+      <div class="kpi"><span class="k-l">Cost per booked</span><span class="k-v">$100.00</span></div>
+      <div class="kpi"><span class="k-l">Show rate</span><span class="k-v">75.0%</span></div>
+      <div class="kpi"><span class="k-l">Consult → treatment</span><span class="k-v">60.0%</span></div>
+      <div class="kpi star"><span class="k-l">Cost per patient</span><span class="k-v">$222.22</span></div>
+      <div class="kpi star"><span class="k-l">ROAS</span><span class="k-v">6.75×</span></div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Metric</th><th>Formula</th><th class="r">Result</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Cost per lead</td><td class="calc">$6,000 ÷ 240</td><td class="r">$25.00</td></tr>
+        <tr><td class="label">Lead-to-booking rate</td><td class="calc">60 ÷ 240</td><td class="r">25.0%</td></tr>
+        <tr><td class="label">Cost per booked consultation</td><td class="calc">$6,000 ÷ 60</td><td class="r">$100.00</td></tr>
+        <tr><td class="label">Show rate</td><td class="calc">45 ÷ 60</td><td class="r">75.0%</td></tr>
+        <tr><td class="label">Consultation-to-treatment rate</td><td class="calc">27 ÷ 45</td><td class="r">60.0%</td></tr>
+        <tr class="hl"><td class="label">Cost per acquired patient</td><td class="calc">$6,000 ÷ 27</td><td class="r">$222.22</td></tr>
+        <tr class="hl"><td class="label">ROAS</td><td class="calc">$40,500 ÷ $6,000</td><td class="r">6.75×</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <p><strong>What I'd look at next:</strong> average revenue per patient is $1,500 ($40,500 ÷ 27). The weakest step is booking: 75% of leads never schedule. Raising lead-to-booking from 25% to 35% with the same spend, and the rest of the funnel unchanged, would produce about 38 patients instead of 27 and roughly $16,000 more revenue. I'd fix follow-up (Q16) before spending more on ads.</p>
+    </div>
+  </article>
+
+  <article class="q" id="q6">
+    <div class="q-head"><div class="q-num">Q06</div><h3>Diagnosing lead quality</h3><p class="q-ask">Meta leads cost $35, Google leads cost $90, but Google leads convert to treatment at 3× the rate. What else would you review?</p></div>
+    <p class="takeaway">On cost per treated patient, Google is already cheaper: $90 ÷ 3 = $30 of "Meta-equivalent" lead cost versus $35. Before moving budget, I'd confirm that with revenue, lag, and headroom data.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Example (Meta converts at 5%)</th><th class="r">Meta</th><th class="r">Google</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Cost per lead</td><td class="r">$35</td><td class="r">$90</td></tr>
+        <tr><td class="label">Lead → treated</td><td class="r">5%</td><td class="r">15%</td></tr>
+        <tr class="hl"><td class="label">Cost per treated patient</td><td class="r">$700</td><td class="r">$600</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <h4>What I'd review before reallocating</h4>
+      <ul>
+        <li><strong>Revenue per patient by channel:</strong> do Google patients buy higher-value treatments or packages? Compare collected revenue and 90-day lifetime value, not just conversion rate.</li>
+        <li><strong>Sample size and time lag:</strong> Meta leads often take longer to decide. A 30-day window can undercount them, so I'd check 60- and 90-day cohorts.</li>
+        <li><strong>Overlap between channels:</strong> is Meta generating the branded Google searches? If branded search volume drops when Meta is paused, Google is getting credit for Meta's work (see Q10).</li>
+        <li><strong>Headroom:</strong> Google impression share lost to budget. If Google already has 90% impression share, more budget buys little.</li>
+        <li><strong>Marginal cost:</strong> the next $1,000 on Google will cost more per lead than the average $1,000 did. I'd decide on expected marginal cost per treated patient.</li>
+        <li><strong>Campaign-level detail:</strong> one bad Meta ad set or an instant-form test could be dragging the whole channel down.</li>
+        <li><strong>Follow-up parity:</strong> were Meta leads contacted as fast as Google leads? Slow follow-up makes any source look worse.</li>
+        <li><strong>Data integrity:</strong> is lead source captured reliably in the CRM (UTMs and click IDs), or are "unknown" leads hiding Meta's true results?</li>
+      </ul>
+      <p><strong>Decision rule:</strong> move budget toward whichever channel has the lower <em>marginal</em> cost per treated patient, as long as it stays below our maximum allowable acquisition cost (Q7).</p>
+    </div>
+  </article>
+
+  <article class="q" id="q7">
+    <div class="q-head"><div class="q-num">Q07</div><h3>Break-even acquisition cost</h3><p class="q-ask">Average new patient generates $1,200 collected revenue at a 65% gross margin.</p></div>
+    <p class="takeaway">Gross profit per new patient is $780. That's the break-even acquisition cost on the first visit. I'd set the working target at $260–$390 and let it rise for treatments with proven repeat visits.</p>
+    <div class="tbl-wrap"><table>
+      <tbody>
+        <tr><td class="label">Gross profit per new patient</td><td class="calc">$1,200 × 0.65</td><td class="r">$780</td></tr>
+        <tr><td class="label">Break-even acquisition cost (first visit)</td><td class="calc">= gross profit</td><td class="r">$780</td></tr>
+        <tr class="hl"><td class="label">Target acquisition cost (profit ratio 2–3×)</td><td class="calc">$780 ÷ 3 to $780 ÷ 2</td><td class="r">$260–$390</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <h4>How I'd set RUMA's maximum allowable acquisition cost</h4>
+      <ol>
+        <li><strong>Start with first-visit gross profit ($780).</strong> Spending more than this loses money on the first visit.</li>
+        <li><strong>Subtract costs gross margin doesn't cover:</strong> free-consultation time, no-show cost, front-desk labor, and payment processing fees.</li>
+        <li><strong>Agree on a profit share with leadership.</strong> For example, if RUMA wants to keep two-thirds of first-visit gross profit, the maximum is about $260.</li>
+        <li><strong>Add lifetime value where it's proven.</strong> If CRM data shows injectable patients return 3× a year, 12-month gross profit might be about $2,000. We could then pay more for those patients while staying profitable, but only on repeat rates we've actually measured, not assumed.</li>
+        <li><strong>Set it per treatment.</strong> A one-time laser package and a recurring neuromodulator patient have different maximums.</li>
+      </ol>
+      <p>For context, Q5's $222 cost per patient sits comfortably inside this range.</p>
+    </div>
+  </article>
+
+  <article class="q" id="q8">
+    <div class="q-head"><div class="q-num">Q08</div><h3>Scaling decisions</h3><p class="q-ask">A Google campaign has produced 5× ROAS for four straight weeks and is limited by budget.</p></div>
+    <p class="takeaway">Scale it, 20–30% at a time every 5–7 days, while watching marginal return, not average return. Stop scaling when the <em>next</em> dollar falls below our ROAS floor.</p>
+    <div class="body">
+      <h4>Before increasing</h4>
+      <ul>
+        <li>Confirm the 5× is based on <strong>collected revenue in the CRM</strong>, not platform-reported conversion value.</li>
+        <li>Check <strong>search impression share lost to budget</strong>. That's how much room is left. Lost to budget at 30% means real headroom. At 5%, we'd need to expand keywords, not just add budget.</li>
+        <li>Confirm the clinic can handle more patients: provider schedule availability and front-desk capacity.</li>
+      </ul>
+      <h4>How fast</h4>
+      <ul>
+        <li>+20–30% every 5–7 days. Larger jumps can push Smart Bidding into recalibration and spike CPA.</li>
+        <li>Account for the lag: revenue arrives 2–4 weeks after the click, so I judge each increase on booked consultations first, then confirm with revenue.</li>
+      </ul>
+      <h4>What I'd monitor</h4>
+      <ul>
+        <li>Marginal ROAS: extra revenue ÷ extra spend.</li>
+        <li>CPC and CPA trend, impression share, and top-of-page rate.</li>
+        <li>Search term quality. More budget often pulls in looser queries.</li>
+        <li>Lead-to-booking and show rate, to confirm quality holds.</li>
+        <li><strong>Stop condition:</strong> marginal ROAS below 3× (or cost per patient above target), or impression share maxed out. Next steps at that point: new keyword themes, a wider radius, adjacent treatments, or YouTube/Demand Gen remarketing.</li>
+      </ul>
+    </div>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ TRACKING ============ -->
+<section id="tracking">
+  <div class="section-head">
+    <div class="eyebrow">Section 3</div>
+    <h2>Tracking and attribution</h2>
+    <p>One ID follows each person from ad click to collected revenue, without sending protected health information to ad platforms.</p>
+  </div>
+  <div class="qs">
+
+  <article class="q" id="q9">
+    <div class="q-head"><div class="q-num">Q09</div><h3>Conversion tracking setup</h3><p class="q-ask">Form submissions, calls, online booking, attendance, treatment, and collected revenue.</p></div>
+    <p class="takeaway">Web events go through Google Tag Manager with server-side sending. Calls go through HIPAA-compliant call tracking. Attendance, treatment, and revenue come from the CRM/EMR, matched back by click ID.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Event</th><th>How it's tracked</th><th>Tools</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Form submission</td><td>A GTM trigger on successful submit (not on button click). Hidden fields capture UTMs, gclid/gbraid, and fbclid (Meta's click ID), plus Meta's fbc and fbp browser cookies, into the CRM. The event fires to GA4, Meta Pixel + Conversions API (deduplicated with an event_id), and Google Ads with enhanced conversions.</td><td>GTM, GA4, Meta Pixel + Conversions API, Google Ads</td></tr>
+        <tr><td class="label">Phone call</td><td>Dynamic number insertion shows a unique number per source and session. Calls over 60 seconds count as qualified. Google call assets use Google forwarding numbers. Call data syncs to Google Ads and the CRM.</td><td>CallRail or CallTrackingMetrics (with a BAA)</td></tr>
+        <tr><td class="label">Online booking</td><td>The booking widget sends a confirmation event (postMessage to the dataLayer, or a redirect to a confirmation page). Cross-domain tracking is set up if the scheduler is on its own domain. Click IDs are passed into the booking record.</td><td>Scheduler (e.g. Boulevard, Zenoti, Aesthetic Record), GTM</td></tr>
+        <tr><td class="label">Consultation attended</td><td>Appointment status changes to "checked in / completed" in the scheduler or CRM. That triggers an offline conversion.</td><td>CRM/EMR, Zapier/Make or server-side GTM</td></tr>
+        <tr><td class="label">Completed treatment</td><td>A treatment record or invoice created in the EMR/POS triggers an offline conversion, sent as a generic event with no treatment details.</td><td>EMR/POS, CRM</td></tr>
+        <tr><td class="label">Collected revenue</td><td>The paid invoice amount (net of refunds) is attached to the patient's lead ID and sent as a conversion value.</td><td>POS, CRM, Looker Studio for reporting</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <p><strong>The piece that holds it together:</strong> a single lead ID created at first contact and carried onto the patient record. Every downstream event can then be tied back to the original click and campaign.</p>
+      <p><strong>HIPAA guardrails:</strong> BAAs with call tracking and data-routing vendors. No pixels on patient portal or intake pages. Server-side tagging to strip anything sensitive. Ad platforms only receive hashed contact info, a generic event name, and a dollar value, never the treatment or health condition.</p>
+    </div>
+  </article>
+
+  <article class="q" id="q10">
+    <div class="q-head"><div class="q-num">Q10</div><h3>Attribution challenge</h3><p class="q-ask">Meta ad click → Google branded search five days later → paid search click → phone call to book.</p></div>
+    <p class="takeaway">Both channels earned credit. Meta created the demand and Google brand search captured it. In leadership reporting the patient is counted once, with first touch and last touch both shown.</p>
+    <div class="body">
+      <ul>
+        <li><strong>What the platforms will say:</strong> Meta claims it (7-day click window) and Google claims it (last click). Add up platform reports and this one patient becomes two. That's why platform totals always exceed actual patients.</li>
+        <li><strong>How I'd credit it:</strong> Meta is the <em>originating</em> channel. Google Brand is the <em>capturing</em> channel. A branded search means the person already knew us, so I wouldn't treat brand search as a demand generator when deciding budget.</li>
+        <li><strong>Source of truth:</strong> the CRM counts one patient, one revenue amount. Channel credit is shown as first touch (Meta) and last touch (Google Brand). Internally I'd use a 40/20/40 position-based model, where the first and last touch each get 40%, as a tiebreaker.</li>
+        <li><strong>Self-reported attribution:</strong> add "How did you hear about us?" at booking. Answers like "I saw you on Instagram" are strong evidence of Meta's contribution.</li>
+        <li><strong>Test incrementality:</strong> track branded search volume against Meta spend, and run a periodic geo holdout or Meta Conversion Lift study to measure what Meta actually adds.</li>
+      </ul>
+      <p><strong>How I'd present it to leadership:</strong> "One new patient, two paid touches. Meta introduced her to RUMA. Five days later she searched our name and called. She's counted once in the $X revenue. In the channel view, Meta gets credit for starting it and Google Brand for closing it. Our overall number is <em>blended cost per patient</em> (total spend ÷ total new patients), which can't be double counted."</p>
+    </div>
+  </article>
+
+  <article class="q" id="q11">
+    <div class="q-head"><div class="q-num">Q11</div><h3>Tracking audit</h3><p class="q-ask">Meta, Google Ads, GA4, the CRM, and the scheduler all show different totals. Walk through your audit in order.</p></div>
+    <p class="takeaway">Define the source of truth first, then line up date ranges, then work from the tags down to the CRM. Some difference between systems is normal. The goal is to explain every gap and fix the ones that shouldn't exist.</p>
+    <div class="body">
+      <ol>
+        <li><strong>Agree on definitions and a source of truth.</strong> What counts as a lead, a booking, a patient? The CRM/scheduler owns bookings and patients, and the POS owns revenue.</li>
+        <li><strong>Line up the data.</strong> Same date range, time zone, and currency. Note each platform's attribution window and whether it reports by click date or conversion date.</li>
+        <li><strong>Build a reconciliation sheet.</strong> One row per system, one column per event, and the gap between each system and the source of truth.</li>
+        <li><strong>Inventory Google Ads conversion actions.</strong> Look for duplicates (e.g. a GA4 import <em>and</em> a native tag for the same form), "every" vs "one" counting, and secondary actions mistakenly set as primary.</li>
+        <li><strong>Inventory Meta events.</strong> Check pixel and Conversions API deduplication (matching event_id), Event Match Quality, and duplicate or legacy events.</li>
+        <li><strong>Test the tags live.</strong> Use Tag Assistant, GTM preview, and Meta Test Events. Look for tags firing on button click instead of success, on thank-you page reloads, or not at all inside the booking iframe.</li>
+        <li><strong>Check GA4 setup.</strong> Key event configuration, cross-domain tracking to the scheduler, referral exclusions (booking and payment domains), and Consent Mode.</li>
+        <li><strong>Check call tracking.</strong> Number swap coverage, repeat callers counted as new leads, and qualified-call thresholds.</li>
+        <li><strong>Check CRM data.</strong> UTM and click ID capture rate, duplicate records, spam leads, and manual entries with no source.</li>
+        <li><strong>Connect the scheduler and CRM.</strong> Confirm bookings are linked to their originating lead.</li>
+        <li><strong>Fix and document.</strong> Write a one-page tracking plan with event names, triggers, and owners.</li>
+        <li><strong>Monitor ongoing.</strong> A monthly reconciliation with an agreed tolerance (e.g. ad platforms within ±15% of the CRM).</li>
+      </ol>
+    </div>
+  </article>
+
+  <article class="q" id="q12">
+    <div class="q-head"><div class="q-num">Q12</div><h3>Offline conversion tracking</h3><p class="q-ask">Send attendance, treatment, and revenue back to Google and Meta so they optimize for qualified patients.</p></div>
+    <p class="takeaway">Capture click IDs and hashed contact info at the lead, carry them through the CRM, and send each funnel stage back daily as its own conversion with its own value.</p>
+    <div class="body">
+      <ol>
+        <li><strong>Capture at the lead:</strong> gclid/gbraid/wbraid and Meta's click cookies (fbc, fbp), plus email and phone. Store them on the lead record so they stay attached through the patient record.</li>
+        <li><strong>Define stages in the CRM:</strong> Lead → Booked → Attended → Treated (with collected value).</li>
+        <li><strong>Google:</strong> use enhanced conversions for leads, which matches hashed email and phone and uses the gclid when present. Upload via a native CRM integration, the Google Ads API, or Zapier, at least daily and always within 90 days of the click. Each stage is its own conversion action. <em>Treated</em> (with value) becomes the primary bidding goal once volume allows, and the others stay secondary.</li>
+        <li><strong>Meta:</strong> the Conversions API from the CRM sends custom events (e.g. <code>QualifiedLead</code>, <code>ConsultAttended</code>) and <code>Purchase</code> with value, matched on hashed email and phone, fbc, and the lead ID. For instant-form campaigns, use Meta's "Conversion leads" optimization, which learns from CRM stage updates.</li>
+        <li><strong>Move the bidding goal down the funnel:</strong> Google goes from Target CPA on bookings to Target CPA on attended, then Target ROAS on revenue once there are about 30–50 a month. Meta moves from Lead to a deeper custom event when it reaches about 50 a week.</li>
+        <li><strong>Keep it compliant:</strong> generic event names and dollar values only. Never send treatment type, diagnosis, or anything that reveals a health condition. BAAs with integration vendors, and a legal review before launch.</li>
+      </ol>
+    </div>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ CONVERSION ============ -->
+<section id="conversion">
+  <div class="section-head">
+    <div class="eyebrow">Section 4</div>
+    <h2>Conversion optimization</h2>
+    <p>Improving conversion is the cheapest way to lower acquisition cost, because it doesn't require more ad spend.</p>
+  </div>
+  <div class="qs">
+
+  <article class="q" id="q13">
+    <div class="q-head"><div class="q-num">Q13</div><h3>Landing-page evaluation</h3><p class="q-ask">High click-through rate, low conversion rate. First 10 elements to evaluate.</p></div>
+    <p class="takeaway">First, confirm conversions are actually being counted. Then check whether the page delivers what the ad promised, on a phone, in the first five seconds.</p>
+    <div class="body">
+      <ol>
+        <li><strong>Tracking:</strong> submit a test lead. A broken tag or booking iframe can make a good page look like it doesn't convert.</li>
+        <li><strong>Message match:</strong> does the headline repeat the ad's treatment, offer, and promise?</li>
+        <li><strong>First mobile screen:</strong> what it is, who it's for, the result, and a visible CTA, all without scrolling.</li>
+        <li><strong>Load speed:</strong> mobile Largest Contentful Paint (LCP) under 2.5 seconds. Most paid traffic is mobile.</li>
+        <li><strong>Offer and pricing clarity:</strong> "starting at" pricing, consultation fee policy, financing. Hidden prices lose price-checkers.</li>
+        <li><strong>CTA and booking path:</strong> one primary action, the number of steps to book, and whether online booking is available.</li>
+        <li><strong>Form friction:</strong> number of fields, required fields, and click-to-call as an alternative.</li>
+        <li><strong>Trust:</strong> real results photos (compliant and consented), review rating and count, provider credentials (MD/NP/PA), and clinic photos instead of stock.</li>
+        <li><strong>Objection handling:</strong> pain, downtime, how long results last, safety, and who performs the treatment.</li>
+        <li><strong>Exits and behavior:</strong> navigation links that pull people away, plus Microsoft Clarity heatmaps and session recordings showing where people stop scrolling.</li>
+      </ol>
+      <p class="note">A high CTR with low conversion can also mean the ad attracts curiosity clicks. I'd check whether it's all audiences or only certain placements.</p>
+    </div>
+  </article>
+
+  <article class="q" id="q14">
+    <div class="q-head"><div class="q-num">Q14</div><h3>Conversion improvement plan</h3><p class="q-ask">2,000 visitors/month at 3% conversion. What if conversion reaches 5%? Effect on CPL at the same CPC?</p></div>
+    <p class="takeaway">Leads rise from 60 to 100 a month (+67%) and cost per lead falls 40%, with no extra ad spend.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Assuming CPC = $3.00</th><th class="r">At 3%</th><th class="r">At 5%</th><th class="r">Change</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Visitors</td><td class="r">2,000</td><td class="r">2,000</td><td class="r">—</td></tr>
+        <tr><td class="label">Ad spend</td><td class="r">$6,000</td><td class="r">$6,000</td><td class="r">—</td></tr>
+        <tr><td class="label">Leads</td><td class="r">60</td><td class="r">100</td><td class="r">+40 (+67%)</td></tr>
+        <tr class="hl"><td class="label">Cost per lead</td><td class="r">$100.00</td><td class="r">$60.00</td><td class="r">−40%</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <p><strong>Why it's 40% at any CPC:</strong> cost per lead = CPC ÷ conversion rate. Going from 3% to 5% multiplies CPL by 3/5 = 0.6, a 40% reduction whether CPC is $2 or $8.</p>
+      <p>The caveat: I'd confirm the extra 40 leads book at the same rate. A change that adds leads by lowering the bar (like removing a qualifying question) can raise lead count while lowering booked consultations.</p>
+    </div>
+  </article>
+
+  <article class="q" id="q15">
+    <div class="q-head"><div class="q-num">Q15</div><h3>A/B test design</h3><p class="q-ask">Hypothesis, variable, primary metric, and minimum conditions before choosing a winner.</p></div>
+    <p class="takeaway">Test a callback request form against real-time self-scheduling. Judge it on booked consultations per visitor, not form fills.</p>
+    <div class="two">
+      <div class="box"><h5>Hypothesis</h5><p>If visitors can pick an appointment time on the page instead of requesting a callback, more will book, because it removes the wait and the phone tag, and people commit while intent is highest.</p></div>
+      <div class="box"><h5>Variable</h5><p><strong>A (control):</strong> "Request a consultation" form, then staff call to schedule.<br><strong>B:</strong> an embedded calendar showing live availability, with the same page, offer, and copy otherwise.</p></div>
+      <div class="box"><h5>Primary metric</h5><p><strong>Booked consultations ÷ visitors</strong>, measured within 7 days of the visit. Secondary: show rate and consultation-to-treatment rate, to make sure B's bookings are real.</p></div>
+      <div class="box"><h5>Minimum conditions</h5><ul>
+        <li>50/50 random split of the same traffic sources</li>
+        <li>Sample size fixed before starting: about 2,500 visitors per variant to detect a 3% → 4.5% lift (95% confidence, 80% power)</li>
+        <li>At least 2 full weeks, in whole-week cycles</li>
+        <li>No changes to ads, budgets, or offers during the test</li>
+        <li>Traffic split checked to confirm it's really close to 50/50</li>
+      </ul></div>
+    </div>
+    <p class="note">At about 2,000 visitors a month, a test like this takes roughly 10 weeks. That's why I'd only test bold changes like this one at RUMA's traffic level. Button colors can't reach significance on that volume.</p>
+  </article>
+
+  <article class="q" id="q16">
+    <div class="q-head"><div class="q-num">Q16</div><h3>Lead follow-up</h3><p class="q-ask">Leads are sufficient but only 25% book. Is it quality, offer, response time, sales process, availability, or follow-up?</p></div>
+    <p class="takeaway">Split "lead → booked" into smaller steps. Where people drop off tells you which of the six causes it is.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Step</th><th>If it's weak, the cause is likely</th><th>How I'd check</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Lead → contacted</td><td>Response time, follow-up</td><td>Median speed to lead, after-hours and weekend leads, number of attempts, channels used (call + text + email), 7–14 day follow-up sequence</td></tr>
+        <tr><td class="label">Contacted → real conversation</td><td>Lead quality</td><td>Fake or wrong numbers, out-of-area leads, wrong service. Booking rate by source, campaign, ad, and form type.</td></tr>
+        <tr><td class="label">Conversation → booked</td><td>Offer, sales process</td><td>Call recordings scored against a checklist, lost-reason codes (price, "just browsing", timing), booking rate <em>by staff member</em></td></tr>
+        <tr><td class="label">Wants to book → booked</td><td>Scheduling availability</td><td>Days until the next open consultation. Booking rate falls sharply once the wait passes about 7 days.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <ul>
+        <li><strong>If one staff member books 40% and another 15%</strong>, it's a process and training problem, not a lead problem.</li>
+        <li><strong>If booking rate varies by ad or campaign</strong> with the same follow-up, it's lead quality or offer mismatch.</li>
+        <li><strong>Quick wins while diagnosing:</strong> an instant automated text with a booking link, a 5-minute response time goal during business hours, a 6-touch follow-up over 10 days, and held-open consultation slots for new leads.</li>
+      </ul>
+    </div>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ CREATIVE ============ -->
+<section id="creative">
+  <div class="section-head">
+    <div class="eyebrow">Section 5</div>
+    <h2>Creative and advertising judgment</h2>
+    <p>Creative that builds trust and stays inside platform policy.</p>
+  </div>
+  <div class="qs">
+
+  <article class="q" id="q17">
+    <div class="q-head"><div class="q-num">Q17</div><h3>Meta creative plan</h3><p class="q-ask">Three ad concepts: hook, format, core message, CTA, and audience.</p></div>
+    <p class="takeaway">Three concepts, each tackling a different reason people hesitate: fear of looking unnatural, fear of the unknown, and distrust of hype.</p>
+    <div class="ads">
+      <div class="ad">
+        <div class="ad-top"><i></i><div>RUMA<small>Sponsored · Injectables</small></div></div>
+        <div class="ad-visual v1"><span class="fmt">9:16 Reel · 25s</span><p class="hook">"Will Botox make me look frozen? Here's what I tell every patient."</p></div>
+        <dl class="ad-body">
+          <dt>Format</dt><dd>Injector speaking to camera, captioned, filmed in the treatment room</dd>
+          <dt>Core message</dt><dd>Natural results come from conservative dosing and a plan built at the consultation</dd>
+          <dt>Audience</dt><dd>Prospecting: women 28–45 in the radius, first-timers, Advantage+ broad</dd>
+        </dl>
+        <div class="ad-cta"><span>Book a consultation</span><span>›</span></div>
+      </div>
+      <div class="ad">
+        <div class="ad-top"><i></i><div>RUMA<small>Sponsored · Skin</small></div></div>
+        <div class="ad-visual v2"><span class="fmt">Carousel · 6 cards</span><p class="hook">Your first microneedling visit, start to finish.</p></div>
+        <dl class="ad-body">
+          <dt>Format</dt><dd>UGC-style carousel: check-in → numbing → treatment → skin on day 1, 3, and 7</dd>
+          <dt>Core message</dt><dd>Removes the unknown: what it feels like, real downtime, and when results show</dd>
+          <dt>Audience</dt><dd>Women 30–55 with skincare interests, plus video viewers from concept 1</dd>
+        </dl>
+        <div class="ad-cta"><span>See pricing</span><span>›</span></div>
+      </div>
+      <div class="ad">
+        <div class="ad-top"><i></i><div>RUMA<small>Sponsored · Wellness</small></div></div>
+        <div class="ad-visual v3"><span class="fmt">Static + review · 4:5</span><p class="hook">What a provider-led wellness consult actually covers.</p></div>
+        <dl class="ad-body">
+          <dt>Format</dt><dd>Clean static: 3-step checklist (history → labs → plan) with a real patient review underneath</dd>
+          <dt>Core message</dt><dd>Evidence-based and led by a provider. It starts with your labs, not a sales pitch.</dd>
+          <dt>Audience</dt><dd>Retargeting: site visitors and engagers, plus adults 35–60 broad in the radius</dd>
+        </dl>
+        <div class="ad-cta"><span>Learn more</span><span>›</span></div>
+      </div>
+    </div>
+    <p class="note">Every hook describes the service, not the viewer. Meta's personal attributes policy prohibits lines like "Tired of your wrinkles?" that imply we know something about the person.</p>
+  </article>
+
+  <article class="q" id="q18">
+    <div class="q-head"><div class="q-num">Q18</div><h3>Underperforming campaign</h3><p class="q-ask">Strong CTR, cheap clicks, very few qualified patients.</p></div>
+    <p class="takeaway">Meta is doing exactly what it's been told: finding people who click. Change what it optimizes for first, then the creative.</p>
+    <div class="two">
+      <div class="box"><h5>Most likely causes</h5><ul>
+        <li>Optimizing for link clicks, landing page views, or cheap instant-form leads</li>
+        <li>Curiosity-bait or deal-driven creative ("$99 special") attracting bargain hunters</li>
+        <li>Audience Network or in-app placements producing accidental clicks</li>
+        <li>Delivery outside a realistic drive radius</li>
+        <li>Landing page doesn't match the ad</li>
+        <li>No qualified-patient signal sent back to Meta</li>
+      </ul></div>
+      <div class="box"><h5>What I'd change, in order</h5><ol>
+        <li>Confirm tracking and lead-source data are accurate</li>
+        <li>Switch the optimization event to a website booking request, and start sending qualified-lead events through the Conversions API</li>
+        <li>Remove Audience Network and review placement breakdowns</li>
+        <li>Pre-qualify in the creative: show "starting at" pricing and who the treatment is for</li>
+        <li>Tighten the radius, and add a qualifying question if using forms</li>
+      </ol></div>
+    </div>
+  </article>
+
+  <article class="q" id="q19">
+    <div class="q-head"><div class="q-num">Q19</div><h3>Advertising compliance</h3><p class="q-ask">Policy risks in aesthetics, wellness, weight management, hormones, and body transformation, and how to protect RUMA's accounts.</p></div>
+    <p class="takeaway">The biggest risks are prescription drug terms, before/after imagery, claims about the viewer, and health data in pixels. Staying compliant rarely costs performance, because trust-based creative tends to convert better anyway.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Risk</th><th>What it means for RUMA</th></tr></thead>
+      <tbody>
+        <tr><td class="label">Personal attributes (Meta)</td><td>No copy that asserts or implies the viewer's health, weight, or appearance ("Struggling with belly fat?")</td></tr>
+        <tr><td class="label">Before/after and body image</td><td>Meta bans before/after images for weight loss and restricts ads that encourage negative self-image. Weight-loss ads must target 18+.</td></tr>
+        <tr><td class="label">Prescription drugs</td><td>Brand names like Botox and semaglutide in ad copy commonly trigger disapproval on both platforms. Promoting prescription drugs may require LegitScript certification. Use generic terms ("wrinkle relaxer", "medical weight management").</td></tr>
+        <tr><td class="label">Claims and testimonials (FTC)</td><td>No guarantees ("lose 20 lbs in 30 days"). Claims must be backed up. Testimonials must reflect typical results or be clearly disclosed. Written patient consent for any photo or review.</td></tr>
+        <tr><td class="label">Compounded and off-label drugs (FDA)</td><td>Never present compounded GLP-1s as "the same as" brand-name drugs, and no off-label efficacy claims. Hormone therapy claims need special care.</td></tr>
+        <tr><td class="label">Health data in tracking (HIPAA)</td><td>Pixels on booking and intake pages can leak protected health information. Use BAAs, server-side tagging, and generic event names.</td></tr>
+        <tr><td class="label">Health targeting (Google)</td><td>Google's personalized advertising policy restricts remarketing and customer lists based on health. Remarketing needs to be built accordingly.</td></tr>
+        <tr><td class="label">State rules</td><td>Utah's medical advertising and professional licensing rules: accurate provider titles, credentials, and supervision disclosures.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="body">
+      <h4>How I'd protect the accounts</h4>
+      <ul>
+        <li>Verified business and domain, two-factor authentication for every user, at least two admins, and a clean payment method.</li>
+        <li>A pre-launch compliance checklist for every ad and landing page, with provider sign-off on medical claims.</li>
+        <li>Landing pages held to the same standard as the ads. Platforms review both.</li>
+        <li>Handle disapprovals through the proper review process. Don't repeatedly resubmit rejected ads, because that hurts account standing.</li>
+        <li>Build creative around what's allowed and effective anyway: provider expertise, the process, education, patient experience, and reviews.</li>
+      </ul>
+    </div>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ REPORTING ============ -->
+<section id="reporting">
+  <div class="section-head">
+    <div class="eyebrow">Section 6</div>
+    <h2>Reporting and accountability</h2>
+    <p>A one-page weekly view that goes from spend all the way to profit.</p>
+  </div>
+  <div class="qs">
+
+  <article class="q" id="q20">
+    <div class="q-head"><div class="q-num">Q20</div><h3>Executive scorecard</h3><p class="q-ask">A sample weekly paid-media scorecard plus a short written summary.</p></div>
+    <p class="note"><strong>Illustrative numbers</strong> for a $10k/month account. Treatments and revenue are the visits completed this week, regardless of when the lead came in.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Metric</th><th class="r">This week</th><th class="r">Last week</th><th class="r">Target</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr class="group"><td colspan="5">Meta</td></tr>
+        <tr><td>Spend</td><td class="r">$1,050</td><td class="r">$1,020</td><td class="r">$1,050</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Link CTR · CPM</td><td class="r">1.4% · $18.40</td><td class="r">1.1% · $19.10</td><td class="r">≥1.0%</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Leads · CPL</td><td class="r">34 · $30.88</td><td class="r">29 · $35.17</td><td class="r">≤$40</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Booked consultations</td><td class="r">9</td><td class="r">10</td><td class="r">10</td><td><span class="pill watch">Watch</span></td></tr>
+        <tr class="group"><td colspan="5">Google</td></tr>
+        <tr><td>Spend</td><td class="r">$1,250</td><td class="r">$1,260</td><td class="r">$1,250</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Search impression share · lost to budget</td><td class="r">62% · 28%</td><td class="r">64% · 26%</td><td class="r">lost &lt;15%</td><td><span class="pill off">Off track</span></td></tr>
+        <tr><td>Leads · CPL</td><td class="r">16 · $78.13</td><td class="r">17 · $74.12</td><td class="r">≤$90</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Booked consultations</td><td class="r">8</td><td class="r">8</td><td class="r">8</td><td><span class="pill ok">On track</span></td></tr>
+        <tr class="group"><td colspan="5">Landing pages</td></tr>
+        <tr><td>Sessions · conversion rate</td><td class="r">1,180 · 4.2%</td><td class="r">1,050 · 4.4%</td><td class="r">≥4.0%</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Mobile load time (LCP)</td><td class="r">2.1s</td><td class="r">2.2s</td><td class="r">&lt;2.5s</td><td><span class="pill ok">On track</span></td></tr>
+        <tr class="group"><td colspan="5">Lead management</td></tr>
+        <tr><td>Total leads</td><td class="r">50</td><td class="r">46</td><td class="r">48</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Median speed to lead</td><td class="r">11 min</td><td class="r">6 min</td><td class="r">&lt;5 min</td><td><span class="pill off">Off track</span></td></tr>
+        <tr><td>Contact rate</td><td class="r">78%</td><td class="r">85%</td><td class="r">≥85%</td><td><span class="pill off">Off track</span></td></tr>
+        <tr class="group"><td colspan="5">Consultations</td></tr>
+        <tr><td>Booked · lead-to-booking rate</td><td class="r">17 · 34%</td><td class="r">18 · 39%</td><td class="r">≥40%</td><td><span class="pill off">Off track</span></td></tr>
+        <tr><td>Cost per booked consultation</td><td class="r">$135.29</td><td class="r">$126.67</td><td class="r">≤$125</td><td><span class="pill watch">Watch</span></td></tr>
+        <tr><td>Attended · show rate</td><td class="r">13 · 76%</td><td class="r">14 · 78%</td><td class="r">≥80%</td><td><span class="pill watch">Watch</span></td></tr>
+        <tr class="group"><td colspan="5">Treatments</td></tr>
+        <tr><td>Patients treated · consultation-to-treatment</td><td class="r">8 · 62%</td><td class="r">9 · 64%</td><td class="r">≥60%</td><td><span class="pill ok">On track</span></td></tr>
+        <tr><td>Cost per new patient</td><td class="r">$287.50</td><td class="r">$253.33</td><td class="r">≤$300</td><td><span class="pill ok">On track</span></td></tr>
+        <tr class="group"><td colspan="5">Revenue and ROI</td></tr>
+        <tr><td>Collected revenue · per patient</td><td class="r">$11,200 · $1,400</td><td class="r">$12,150 · $1,350</td><td class="r">—</td><td><span class="pill ok">On track</span></td></tr>
+        <tr class="hl"><td><strong>ROAS (collected revenue ÷ spend)</strong></td><td class="r">4.87×</td><td class="r">5.33×</td><td class="r">≥4.0×</td><td><span class="pill ok">On track</span></td></tr>
+        <tr class="hl"><td><strong>Gross profit after ad spend</strong></td><td class="r">$4,980</td><td class="r">$5,618</td><td class="r">—</td><td><span class="pill watch">Watch</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="summary">
+      <div><h4>What happened</h4><p>Leads rose 9% (46 → 50) and Meta CPL dropped to $31, but booked consultations fell from 18 to 17. Lead-to-booking slipped to 34%.</p></div>
+      <div><h4>Why</h4><p>New Meta UGC creative drove more weekend leads, and weekend leads weren't contacted until Monday. Median response time nearly doubled to 11 minutes and contact rate fell to 78%. The ads worked, but follow-up couldn't keep up.</p></div>
+      <div><h4>What I'm changing</h4><p>(1) An instant automated text with a self-booking link for after-hours leads. (2) Saturday follow-up coverage. (3) Moving $150/week from Meta retargeting to Google non-brand, which is losing 28% impression share to budget at a strong cost per booking.</p></div>
+      <div><h4>Expected result</h4><p>Lead-to-booking back to 40%+, which is about 3 more booked consultations a week. At current show and treatment rates that's 1–2 more patients, or roughly $1,400–$2,800 more weekly revenue with no increase in total spend.</p></div>
+    </div>
+  </article>
+
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section id="portfolio">
+  <div class="section-head">
+    <div class="eyebrow">Practical submission</div>
+    <h2>Campaigns I've built and managed</h2>
+    <p>Real examples from my own work, with client details anonymized.</p>
+  </div>
+  <div class="qs">
+
+    <div class="todo">
+      <span class="tag">Ava to complete</span>
+      <h3>Meta campaign example</h3>
+      <dl>
+        <dt>Client / industry</dt><dd>Anonymized, e.g. "Regional med spa" or "Local service business"</dd>
+        <dt>My role</dt><dd>What you personally built, managed, or decided</dd>
+        <dt>Budget managed</dt><dd>Monthly or total spend</dd>
+        <dt>Measurable result</dt><dd>Leads, CPL, bookings, revenue, or ROAS, with a timeframe</dd>
+        <dt>Biggest optimization</dt><dd>The one change that moved results most, and by how much</dd>
+        <dt>Screenshot</dt><dd>Anonymized Ads Manager view</dd>
+      </dl>
+    </div>
+
+    <div class="todo">
+      <span class="tag">Ava to complete</span>
+      <h3>Google campaign example</h3>
+      <dl>
+        <dt>Client / industry</dt><dd>Anonymized</dd>
+        <dt>My role</dt><dd>What you personally built, managed, or decided</dd>
+        <dt>Budget managed</dt><dd>Monthly or total spend</dd>
+        <dt>Measurable result</dt><dd>Conversions, CPA, ROAS, with a timeframe</dd>
+        <dt>Biggest optimization</dt><dd>E.g. negative keyword cleanup, bidding change, landing page change</dd>
+        <dt>Screenshot</dt><dd>Anonymized Google Ads view</dd>
+      </dl>
+    </div>
+
+    <div class="todo">
+      <span class="tag">Ava to complete</span>
+      <h3>A campaign that didn't perform</h3>
+      <dl>
+        <dt>What it was</dt><dd>Goal, channel, budget</dd>
+        <dt>What went wrong</dt><dd>The numbers, stated plainly</dd>
+        <dt>How I diagnosed it</dt><dd>What you checked and what you found</dd>
+        <dt>What I learned</dt><dd>What you now do differently because of it</dd>
+      </dl>
+    </div>
+
+  </div>
+</section>
+
+  </main>
+</div>
+
+<footer>Prepared by Ava for RUMA · Scorecard figures in Q20 are illustrative; all calculations are shown in full.</footer>
+
+<script>
+(function(){
+  var links = document.querySelectorAll('nav.toc a');
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  if(!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){ a.classList.remove('active'); });
+        var a = map[e.target.id]; if(a){ a.classList.add('active'); if(a.scrollIntoView && window.innerWidth<=960){ a.parentNode.parentNode.parentNode.scrollLeft = a.offsetLeft - 16; } }
+      }
+    });
+  }, {rootMargin:'-30% 0px -65% 0px'});
+  document.querySelectorAll('main section').forEach(function(s){ obs.observe(s); });
+})();
+</script>
+</body>
+</html>
