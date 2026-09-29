@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
+  color-scheme:light;
   --bg:#F4F6F5; --surface:#FFFFFF; --ink:#18201E; --muted:#5B6663; --line:#DCE2DF;
   --accent:#2E5E56; --accent-soft:#E3EEEB; --blush:#F4E7E2; --blush-ink:#8A4B3C;
   --good:#2F7A4F; --good-soft:#E2F1E7; --warn:#9A5F0C; --warn-soft:#FBEFD9; --bad:#B23A3A; --bad-soft:#F8E1E1;
@@ -17,22 +18,6 @@
   --serif:"Newsreader",Georgia,"Times New Roman",serif;
   --sans:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --bg:#101413; --surface:#171D1C; --ink:#E5ECEA; --muted:#9AA6A2; --line:#2A3331;
-    --accent:#86C2B5; --accent-soft:#1C2D2A; --blush:#2C2220; --blush-ink:#E3A898;
-    --good:#6BC08E; --good-soft:#18291F; --warn:#E0A850; --warn-soft:#2E2412; --bad:#EE8A8A; --bad-soft:#321A1A;
-    --todo:#E8C66A; --todo-soft:#2A2412;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#101413; --surface:#171D1C; --ink:#E5ECEA; --muted:#9AA6A2; --line:#2A3331;
-  --accent:#86C2B5; --accent-soft:#1C2D2A; --blush:#2C2220; --blush-ink:#E3A898;
-  --good:#6BC08E; --good-soft:#18291F; --warn:#E0A850; --warn-soft:#2E2412; --bad:#EE8A8A; --bad-soft:#321A1A;
-  --todo:#E8C66A; --todo-soft:#2A2412;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
